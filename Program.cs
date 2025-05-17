@@ -6,6 +6,7 @@ namespace Projet_salle_de_gym
         {
             var builder = WebApplication.CreateBuilder(args);
 
+
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 

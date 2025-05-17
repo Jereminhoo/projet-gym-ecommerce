@@ -6,4 +6,20 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Core\Domain\" />
+    <Folder Include="Core\Infrastructure\" />
+    <Folder Include="Core\Services\" />
+    <Folder Include="Core\Repository\" />
+    <Folder Include="Extensions\" />
+    <Folder Include="Helpers\" />
+    <Folder Include="Models\Auth\" />
+    <Folder Include="Models\Commandes\" />
+    <Folder Include="Models\Products\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
+  </ItemGroup>
+
 </Project>
