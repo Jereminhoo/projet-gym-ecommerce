@@ -1,0 +1,40 @@
+﻿@model List<Projet_salle_de_gym.Models.Panier.PanierItem>
+
+<h2>Votre panier</h2>
+
+@if (!Model.Any())
+{
+    <p>Votre panier est vide.</p>
+}
+else
+{
+    <table>
+        <thead>
+            <tr>
+                <th>Produit</th>
+                <th>Quantité</th>
+                <th>Prix unitaire</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Nom</td>
+                    <td>@item.Quantite</td>
+                    <td>@item.Prix €</td>
+                    <td>@(item.Prix * item.Quantite) €</td>
+                </tr>
+                <td>
+                    <form asp-action="Supprimer" method="post">
+                        <input type="hidden" name="id" value="@item.IdProduit" />
+                        <button type="submit">Supprimer</button>
+                    </form>
+                </td>
+            }
+        </tbody>
+    </table>
+
+    <p><strong>Total général : @Model.Sum(p => p.Prix * p.Quantite) €</strong></p>
+}
