@@ -30,14 +30,13 @@
                     </ul>
                 </div>
                 <div style="float: right;">
-                    <a asp-controller="Auth" asp-action="Register" class="btn btn-sm btn-primary">Inscription</a>
                     @{
                         var prenom = Context.Session.GetString("Prenom");
                     }
 
                     @if (!string.IsNullOrEmpty(prenom))
                     {
-                        <span class="me-3">Bonjour @prenom 👋</span>
+                        <span class="me-3">Bonjour @prenom :)</span>
 
                         <form asp-controller="Auth" asp-action="Logout" method="post" style="display:inline">
                             <button type="submit" class="btn btn-sm btn-danger">Se déconnecter</button>
@@ -45,6 +44,7 @@
                     }
                     else
                     {
+                        <a asp-controller="Auth" asp-action="Register" class="btn btn-sm btn-primary">Inscription</a>
                         <a asp-controller="Auth" asp-action="Login" class="btn btn-sm btn-primary">Connexion</a>
                     }
 
