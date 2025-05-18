@@ -1,3 +1,5 @@
+using Projet_salle_de_gym.Core.Infrastructure;
+
 namespace Projet_salle_de_gym
 {
     public class Program
@@ -9,6 +11,8 @@ namespace Projet_salle_de_gym
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddScoped<IDbConnectionProvider, PgSqlDbConnectionProvider>();
+            builder.Services.AddSession();
 
             var app = builder.Build();
 
@@ -24,6 +28,7 @@ namespace Projet_salle_de_gym
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseSession();
 
             app.UseAuthorization();
 

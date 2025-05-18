@@ -1,32 +1,35 @@
 using Microsoft.AspNetCore.Mvc;
-using Projet_salle_de_gym.Models;
-using System.Diagnostics;
+using Projet_salle_de_gym.Core.Infrastructure;
+using Projet_salle_de_gym.Models.Products;
+using Dapper;
 
 namespace Projet_salle_de_gym.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IDbConnectionProvider _connectionProvider;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IDbConnectionProvider connectionProvider)
         {
-            _logger = logger;
+            _connectionProvider = connectionProvider;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(int? id_cat)
         {
-            return View();
+            using var connection = await _connectionProvider.CreateConnection();
+
+            var query = id_cat.HasValue
+                ? "SELECT * FROM produit WHERE id_cat = @id_cat"
+                : "SELECT * FROM produit";
+
+            var produits = await connection.QueryAsync<Produit>(query, new { id_cat });
+
+            return View(produits.ToList());
         }
 
         public IActionResult Privacy()
         {
             return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }
