@@ -3,17 +3,38 @@
 <h2>Inscription</h2>
 
 <form asp-action="Register" method="post">
-    <label>Nom :</label>
-    <input asp-for="Nom_util" required /><br />
+    @Html.AntiForgeryToken()
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-    <label>Prénom :</label>
-    <input asp-for="Prenom_util" required /><br />
+    <div class="form-group">
+        <label asp-for="Nom_util"></label>
+        <input asp-for="Nom_util" class="form-control" />
+        <span asp-validation-for="Nom_util" class="text-danger"></span>
+    </div>
 
-    <label>Email :</label>
-    <input asp-for="Mail" type="email" required /><br />
+    <div class="form-group">
+        <label asp-for="Prenom_util"></label>
+        <input asp-for="Prenom_util" class="form-control" />
+        <span asp-validation-for="Prenom_util" class="text-danger"></span>
+    </div>
 
-    <label>Mot de passe :</label>
-    <input asp-for="Mdp" type="password" required /><br />
+    <div class="form-group">
+        <label asp-for="Mail"></label>
+        <input asp-for="Mail" class="form-control" />
+        <span asp-validation-for="Mail" class="text-danger"></span>
+    </div>
 
-    <button type="submit">S’inscrire</button>
+    <div class="form-group">
+        <label asp-for="Mdp"></label>
+        <input asp-for="Mdp" type="password" class="form-control" />
+        <span asp-validation-for="Mdp" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ConfirmMdp"></label>
+        <input asp-for="ConfirmMdp" type="password" class="form-control" />
+        <span asp-validation-for="ConfirmMdp" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">S'inscrire</button>
 </form>

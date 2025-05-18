@@ -24,16 +24,30 @@
                         </li>
 
                         <li class="nav-item">
-                            <a asp-controller="Panier" asp-action="Index">Voir mon panier</a>
-
+                            <a asp-controller="Panier" asp-action="Index" class="btn btn-sm btn-primary">Voir mon panier</a>
                         </li>
 
                     </ul>
                 </div>
                 <div style="float: right;">
-                    <a asp-controller="Auth" asp-action="Register">Inscription</a>
-                    |
-                    <a asp-controller="Auth" asp-action="Login">Connexion</a>
+                    <a asp-controller="Auth" asp-action="Register" class="btn btn-sm btn-primary">Inscription</a>
+                    @{
+                        var prenom = Context.Session.GetString("Prenom");
+                    }
+
+                    @if (!string.IsNullOrEmpty(prenom))
+                    {
+                        <span class="me-3">Bonjour @prenom 👋</span>
+
+                        <form asp-controller="Auth" asp-action="Logout" method="post" style="display:inline">
+                            <button type="submit" class="btn btn-sm btn-danger">Se déconnecter</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <a asp-controller="Auth" asp-action="Login" class="btn btn-sm btn-primary">Connexion</a>
+                    }
+
                 </div>
 
             </div>
