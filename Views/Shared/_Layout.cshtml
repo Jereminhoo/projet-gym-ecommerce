@@ -12,27 +12,39 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Projet_salle_de_gym</a>
+                <h2>E-commerce salle de gym </h2>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
                         @{
+                            var admin = Context.Session.GetString("Admin");
                             var prenom = Context.Session.GetString("Prenom");
                         }
+
+                        <li class="nav-item">
+                            <a class="btn btn-sm btn-primary" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+
                         @if (!string.IsNullOrEmpty(prenom))
                         {
-                                              
-                            <li class="nav-item">
-                                <a asp-controller="Panier" asp-action="Index" class="btn btn-sm btn-primary">Voir mon panier</a>
-                            </li>
-                        }                    
+                            if (admin == "True")
+                            {
+                                <li class="nav-item">
+                                    <a asp-controller="Admin" asp-action="Index" class="btn btn-sm btn-warning">Page administrateur</a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a asp-controller="Panier" asp-action="Index" class="btn btn-sm btn-primary">Voir mon panier</a>
+                                </li>
+                            }
+                        }
                     </ul>
+
                 </div>
                 <div style="float: right;">
                    

@@ -5,7 +5,7 @@ namespace Projet_salle_de_gym.Models.Auth
     public class LoginModel
     {
         [Required]
-        [Display(Name = "Nom d'utilisateur")]
+        [Display(Name = "Mail")]
         public string Mail { get; set; }
 
         [Required]

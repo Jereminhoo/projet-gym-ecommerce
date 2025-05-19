@@ -31,7 +31,7 @@ namespace Projet_salle_de_gym.Controllers
                 "SELECT * FROM utilisateur WHERE mail = @mail",
                 new { mail = model.Mail });
 
-            if (utilisateur == null || !BCrypt.Net.BCrypt.Verify(model.Mdp, utilisateur.Mdp))
+            if (utilisateur == null || utilisateur.Mdp != model.Mdp)
             {
                 ModelState.AddModelError("", "Email ou mot de passe incorrect.");
                 return View();
@@ -42,7 +42,15 @@ namespace Projet_salle_de_gym.Controllers
             HttpContext.Session.SetString("Nom", utilisateur.Nom_util);
             HttpContext.Session.SetString("Admin", utilisateur.Admin.ToString());
 
-            return RedirectToAction("Index", "Home");
+            if (utilisateur.Admin)
+            {
+                return RedirectToAction("Index", "Admin"); // Si admin
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");// Si utilisateur normal
+            }
+
         }
 
         [HttpGet]
@@ -59,17 +67,26 @@ namespace Projet_salle_de_gym.Controllers
 
             using var connection = await _connectionProvider.CreateConnection();
 
-            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(model.Mdp);
+            // Vérifie si le mail existe déjà
+            var emailExiste = await connection.QueryFirstOrDefaultAsync<int?>(
+                "SELECT id_util FROM utilisateur WHERE mail = @mail",
+                new { mail = model.Mail });
+
+            if (emailExiste != null)
+            {
+                ModelState.AddModelError("Mail", "Un compte existe déjà avec cet email.");
+                return View(model);
+            }
 
             var query = @"INSERT INTO utilisateur (nom_util, prenom_util, mail, mdp, admin)
-                          VALUES (@Nom_util, @Prenom_util, @Mail, @Mdp, false)";
+                  VALUES (@Nom_util, @Prenom_util, @Mail, @Mdp, false)";
 
             await connection.ExecuteAsync(query, new
             {
                 model.Nom_util,
                 model.Prenom_util,
                 model.Mail,
-                Mdp = hashedPassword
+                model.Mdp
             });
 
             return RedirectToAction("Login");
