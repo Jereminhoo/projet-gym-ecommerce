@@ -1,6 +1,7 @@
 ﻿@model List<Projet_salle_de_gym.Models.Products.Produit>
 @{
     var prenom = Context.Session.GetString("Prenom");
+    var admin = Context.Session.GetString("Admin");
 }
 <h2>Nos produits</h2>
 
@@ -23,7 +24,7 @@
 
             <form asp-controller="Panier" asp-action="Ajouter" method="post">
                 <input type="hidden" name="id" value="@produit.Id_prod" />
-                @if (!string.IsNullOrEmpty(prenom))
+                @if (!string.IsNullOrEmpty(prenom)&&admin=="False")
                 {
                     <button type="submit">Ajouter au panier</button>
                 }               
