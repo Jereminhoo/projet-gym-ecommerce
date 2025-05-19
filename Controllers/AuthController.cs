@@ -31,7 +31,7 @@ namespace Projet_salle_de_gym.Controllers
                 "SELECT * FROM utilisateur WHERE mail = @mail",
                 new { mail = model.Mail });
 
-            if (utilisateur == null || !BCrypt.Net.BCrypt.Verify(model.Mdp, utilisateur.Mdp))
+            if (utilisateur == null || utilisateur.Mdp != model.Mdp)
             {
                 ModelState.AddModelError("", "Email ou mot de passe incorrect.");
                 return View();
@@ -59,8 +59,6 @@ namespace Projet_salle_de_gym.Controllers
 
             using var connection = await _connectionProvider.CreateConnection();
 
-            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(model.Mdp);
-
             var query = @"INSERT INTO utilisateur (nom_util, prenom_util, mail, mdp, admin)
                           VALUES (@Nom_util, @Prenom_util, @Mail, @Mdp, false)";
 
@@ -69,7 +67,7 @@ namespace Projet_salle_de_gym.Controllers
                 model.Nom_util,
                 model.Prenom_util,
                 model.Mail,
-                Mdp = hashedPassword
+                model.Mdp
             });
 
             return RedirectToAction("Login");
