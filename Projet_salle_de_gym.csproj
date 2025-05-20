@@ -12,6 +12,7 @@
     <Folder Include="Extensions\" />
     <Folder Include="Helpers\" />
     <Folder Include="Models\Commandes\" />
+    <Folder Include="Models\Projets\" />
   </ItemGroup>
 
   <ItemGroup>

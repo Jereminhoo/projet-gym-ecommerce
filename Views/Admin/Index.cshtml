@@ -1,6 +1,29 @@
 ﻿@{
     ViewData["Title"] = "Espace Admin";
 }
-
+@model List<Projet_salle_de_gym.Models.Utilisateurs.Utilisateur>
 <h2>Espace Administrateur</h2>
 <p>Bienvenue dans le panneau d’administration.</p>
+<h2>Liste des utilisateurs</h2>
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.Nom_util</td>
+                    <td>@user.Prenom_util</td>
+                    <td>@user.Mail</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
