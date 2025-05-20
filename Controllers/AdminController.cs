@@ -26,6 +26,15 @@ namespace Projet_salle_de_gym.Controllers
 
             return View(utilisateurs.ToList()); 
         }
-        
+        [HttpPost]
+        public async Task<IActionResult> Supprimer(int id)
+        {
+            using var connection = await _connectionProvider.CreateConnection();
+
+            await connection.ExecuteAsync("DELETE FROM utilisateur WHERE id_util = @id", new { id });
+
+            return RedirectToAction("Index");
+        }
+
     }
 }

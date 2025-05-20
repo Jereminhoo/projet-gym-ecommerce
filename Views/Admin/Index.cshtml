@@ -22,6 +22,12 @@
                     <td>@user.Nom_util</td>
                     <td>@user.Prenom_util</td>
                     <td>@user.Mail</td>
+                <td>
+                    <form asp-controller="Admin" asp-action="Supprimer" method="post" >
+                        <input type="hidden" name="id" value="@user.Id_util" />
+                        <button type="submit" class="btn btn-danger">Supprimer</button>
+                    </form>
+                </td>
                 </tr>
             }
         </tbody>
