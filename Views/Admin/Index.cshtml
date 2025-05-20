@@ -2,34 +2,43 @@
     ViewData["Title"] = "Espace Admin";
 }
 @model List<Projet_salle_de_gym.Models.Utilisateurs.Utilisateur>
-<h2>Espace Administrateur</h2>
+
+<h2 class="mt-3">Espace Administrateur</h2>
 <p>Bienvenue dans le panneau d’administration.</p>
+
+<!-- ✅ Barre de navigation admin -->
+<nav class="nav nav-pills my-4">
+    <a class="nav-link active me-2" asp-controller="Admin" asp-action="Index">Gestion utilisateurs</a>
+    <a asp-action="GererArticles" class="btn btn-outline-primary">
+        <i class="bi bi-box"></i> Gérer les articles
+    </a>
+</nav>
+
+<!-- Liste utilisateurs -->
 <h2>Liste des utilisateurs</h2>
-
-
-    <table class="table">
-        <thead>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Email</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
             <tr>
-                <th>Nom</th>
-                <th>Prénom</th>
-                <th>Email</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var user in Model)
-            {
-                <tr>
-                    <td>@user.Nom_util</td>
-                    <td>@user.Prenom_util</td>
-                    <td>@user.Mail</td>
+                <td>@user.Nom_util</td>
+                <td>@user.Prenom_util</td>
+                <td>@user.Mail</td>
                 <td>
-                    <form asp-controller="Admin" asp-action="Supprimer" method="post" >
+                    <form asp-controller="Admin" asp-action="Supprimer" method="post">
                         <input type="hidden" name="id" value="@user.Id_util" />
-                        <button type="submit" class="btn btn-danger">Supprimer</button>
+                        <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
                     </form>
                 </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
+            </tr>
+        }
+    </tbody>
+</table>

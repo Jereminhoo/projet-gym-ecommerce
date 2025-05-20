@@ -1,0 +1,41 @@
+﻿@model List<Projet_salle_de_gym.Models.Products.Produit>
+@{
+    ViewData["Title"] = "Gérer les articles";
+}
+<h2>Gestion des articles</h2>
+<p>
+    <a class="btn btn-success" asp-action="CreerArticle">Ajouter un nouvel article</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Description</th>
+            <th>Prix</th>
+            <th>Stock</th>
+            <th>Catégorie</th>
+            <th>Photo</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var article in Model)
+        {
+            <tr>
+                <td>@article.Nom_produit</td>
+                <td>@article.Description</td>
+                <td>@article.Prix €</td>
+                <td>@article.Stock</td>
+                <td>@article.Id_cat</td>
+                <td><img src="~/images/@article.Photo" width="40" /></td>
+                <td>
+                    <a class="btn btn-warning btn-sm" asp-action="ModifierArticle" asp-route-id="@article.Id_prod">Modifier</a>
+                    <form asp-action="SupprimerArticle" method="post" style="display:inline">
+                        <input type="hidden" name="id" value="@article.Id_prod" />
+                        <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
