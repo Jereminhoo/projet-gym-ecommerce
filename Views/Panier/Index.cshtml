@@ -31,10 +31,13 @@ else
                         <input type="hidden" name="id" value="@item.IdProduit" />
                         <button type="submit">Supprimer</button>
                     </form>
-                </td>
+            </td>
             }
         </tbody>
     </table>
 
     <p><strong>Total général : @Model.Sum(p => p.Prix * p.Quantite) €</strong></p>
+    <form asp-action="Acheter" method="post">
+        <button type="submit">Commander</button>
+    </form>
 }

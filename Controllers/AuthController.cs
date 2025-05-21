@@ -38,6 +38,7 @@ namespace Projet_salle_de_gym.Controllers
             }
 
             // Stocker prénom et rôle dans la session
+            HttpContext.Session.SetInt32("Id_user", utilisateur.Id_util);
             HttpContext.Session.SetString("Prenom", utilisateur.Prenom_util);
             HttpContext.Session.SetString("Nom", utilisateur.Nom_util);
             HttpContext.Session.SetString("Admin", utilisateur.Admin.ToString());

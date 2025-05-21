@@ -52,6 +52,55 @@ namespace Projet_salle_de_gym.Controllers
             PanierService.SupprimerProduit(HttpContext.Session, id);
             return RedirectToAction("Index");
         }
+        [HttpPost]
+        public async Task<IActionResult> Acheter()
+        {
 
+            int? utilisateurId = HttpContext.Session.GetInt32("Id_user");
+
+
+            // 1. Récupérer le panier depuis la session
+            var panier = PanierService.GetPanier(HttpContext.Session);
+            if (!panier.Any())
+            {
+                TempData["Message"] = "Votre panier est vide.";
+                return RedirectToAction("Index");
+            }
+
+            // 2. Connexion à la base
+            using var connection = await _connectionProvider.CreateConnection();
+
+            // 3. Créer une commande
+            var commandeId = await connection.ExecuteScalarAsync<int>(
+                @"INSERT INTO commande (date_com, id_util)
+          VALUES (@DateCommande, @UtilisateurId);",
+                new
+                {
+                    DateCommande = DateTime.Now,
+                    UtilisateurId = utilisateurId
+                });
+
+            // 4. Ajouter les lignes dans la table detail
+            foreach (var item in panier)
+            {
+                await connection.ExecuteAsync(
+                    @"INSERT INTO detail (id_com, id_prod, quantite, total_prix_unit)
+              VALUES (@CommandeId, @ProduitId, @Quantite, @Total);",
+                    new
+                    {
+                        CommandeId = commandeId,
+                        ProduitId = item.IdProduit,
+                        Quantite = item.Quantite,
+                        Total = item.Prix * item.Quantite
+                    });
+            }
+
+            // 5. Vider le panier
+            PanierService.SavePanier(HttpContext.Session, new List<PanierItem>());
+
+            // 6. Message de confirmation
+            TempData["Message"] = $"Commande #{commandeId} créée avec succès.";
+            return RedirectToAction("Index");
+        }
     }
 }
