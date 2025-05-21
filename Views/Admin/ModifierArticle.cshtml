@@ -23,11 +23,24 @@
     </div>
     <div class="form-group">
         <label asp-for="Id_cat">Catégorie ID</label>
-        <input asp-for="Id_cat" class="form-control" />
+        <select asp-for="Id_cat" class="form-control">
+            <option value="1" selected="@(Model.Id_cat == 1)">Haltères</option>
+            <option value="2" selected="@(Model.Id_cat == 2)">Protéines</option>
+        </select>
+
     </div>
     <div class="form-group">
-        <label asp-for="Photo">Lien image</label>
-        <input asp-for="Photo" class="form-control" />
+        <label asp-for="Photo">Image</label>
+        <select asp-for="Photo" class="form-control">
+            <option value="">-- Choisir une image --</option>
+            @foreach (var image in ViewBag.Images as List<string>)
+            {
+                <option value="@image" selected="@(Model.Photo == image)">
+                    @image
+                </option>
+            }
+        </select>
     </div>
+
     <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
 </form>

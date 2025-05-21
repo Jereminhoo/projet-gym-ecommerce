@@ -29,7 +29,12 @@
 
     <div class="form-group">
         <label asp-for="Id_cat"></label>
-        <input asp-for="Id_cat" class="form-control" />
+        <select asp-for="Id_cat" class="form-control">
+            <option value="">-- Choisir une catégorie --</option>
+            <option value="1">Haltères</option>
+            <option value="2">Protéines</option>
+        </select>
+
     </div>
 
     <div class="form-group">

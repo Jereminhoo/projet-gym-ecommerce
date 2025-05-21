@@ -57,16 +57,17 @@ namespace Projet_salle_de_gym.Controllers
                 if (!Directory.Exists(uploadsFolder))
                     Directory.CreateDirectory(uploadsFolder);
 
-                var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
-                var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                var fileName = Path.GetFileName(imageFile.FileName); // <-- utilise le vrai nom
+                var filePath = Path.Combine(uploadsFolder, fileName);
 
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
                     await imageFile.CopyToAsync(stream);
                 }
 
-                produit.Photo = uniqueFileName;
+                produit.Photo = fileName;
             }
+
 
             using var connection = await _connectionProvider.CreateConnection();
             var query = @"INSERT INTO produit (nom_produit, description, stock, prix, id_cat, photo)
@@ -75,7 +76,6 @@ namespace Projet_salle_de_gym.Controllers
 
             return RedirectToAction("GererArticles");
         }
-
 
 
 
@@ -88,8 +88,17 @@ namespace Projet_salle_de_gym.Controllers
             if (produit == null)
                 return NotFound();
 
+            // 🔽 Récupère les noms de fichiers dans wwwroot/images
+            var imageFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
+            var imageFiles = Directory.GetFiles(imageFolder)
+                                      .Select(Path.GetFileName)
+                                      .ToList();
+
+            ViewBag.Images = imageFiles;
+
             return View(produit);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> ModifierArticle(Produit produit)
