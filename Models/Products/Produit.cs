@@ -28,6 +28,6 @@ namespace Projet_salle_de_gym.Models.Products
         [Display(Name = "Id catégorie")]
         public int? Id_cat { get; set; }  // <- rendu nullable
 
-        public string Photo { get; set; }
+        public string? Photo { get; set; }
     }
 }
