@@ -6,5 +6,7 @@
         public string Nom { get; set; }
         public decimal Prix { get; set; }
         public int Quantite { get; set; }
+        public DateTime DateCommande { get; set; }
+
     }
 }

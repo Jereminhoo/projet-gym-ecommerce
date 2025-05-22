@@ -55,11 +55,8 @@ namespace Projet_salle_de_gym.Controllers
         [HttpPost]
         public async Task<IActionResult> Acheter()
         {
-
             int? utilisateurId = HttpContext.Session.GetInt32("Id_user");
 
-
-            // 1. Récupérer le panier depuis la session
             var panier = PanierService.GetPanier(HttpContext.Session);
             if (!panier.Any())
             {
@@ -67,40 +64,68 @@ namespace Projet_salle_de_gym.Controllers
                 return RedirectToAction("Index");
             }
 
-            // 2. Connexion à la base
             using var connection = await _connectionProvider.CreateConnection();
 
-            // 3. Créer une commande
             var commandeId = await connection.ExecuteScalarAsync<int>(
                 @"INSERT INTO commande (date_com, id_util)
-                VALUES (@DateCommande, @UtilisateurId)
-                RETURNING id_com;",
+          VALUES (@DateCommande, @UtilisateurId)
+          RETURNING id_com;",
                 new
                 {
                     DateCommande = DateTime.Now,
                     UtilisateurId = utilisateurId
                 });
 
-            // 4. Ajouter les lignes dans la table detail
             foreach (var item in panier)
             {
                 await connection.ExecuteAsync(
-                    @"INSERT INTO detail (id_com, quantite, total_prix_unit)
-              VALUES (@CommandeId, @Quantite, @Total);",
+                    @"INSERT INTO detail (id_com, id_prod, quantite, total_prix_unit)
+              VALUES (@CommandeId, @IdProduit, @Quantite, @Total);",
                     new
                     {
                         CommandeId = commandeId,
+                        IdProduit = item.IdProduit,
                         Quantite = item.Quantite,
                         Total = item.Prix * item.Quantite
                     });
             }
 
-            // 5. Vider le panier
             PanierService.SavePanier(HttpContext.Session, new List<PanierItem>());
 
-            // 6. Message de confirmation
             TempData["Message"] = $"Commande #{commandeId} créée avec succès.";
             return RedirectToAction("Index");
         }
+
+
+
+
+        [HttpGet]
+        public async Task<IActionResult> MesCommandes()
+        {
+            var utilisateurId = HttpContext.Session.GetInt32("Id_user");
+
+            using var connection = await _connectionProvider.CreateConnection();
+
+            var commandes = await connection.QueryAsync<PanierItem>(
+         @"SELECT 
+            c.id_com AS IdCommande,
+            c.date_com AS DateCommande,
+            p.nom_produit AS Nom,
+            d.quantite AS Quantite,
+            d.total_prix_unit AS Prix
+          FROM commande c
+          JOIN detail d ON c.id_com = d.id_com
+          JOIN produit p ON d.id_prod = p.id_prod
+          WHERE c.id_util = @Id
+          ORDER BY c.date_com DESC",
+         new { Id = utilisateurId });
+
+
+
+            return View(commandes.ToList());
+        }
+
+
     }
+
 }
