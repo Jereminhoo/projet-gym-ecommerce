@@ -50,6 +50,8 @@ namespace Projet_salle_de_gym.Controllers
         [HttpPost]
         public async Task<IActionResult> CreerArticle(Produit produit, IFormFile imageFile)
         {
+            if (!ModelState.IsValid)
+                return View();
             if (imageFile != null && imageFile.Length > 0)
             {
                 var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
