@@ -73,7 +73,8 @@ namespace Projet_salle_de_gym.Controllers
             // 3. Créer une commande
             var commandeId = await connection.ExecuteScalarAsync<int>(
                 @"INSERT INTO commande (date_com, id_util)
-          VALUES (@DateCommande, @UtilisateurId);",
+                VALUES (@DateCommande, @UtilisateurId)
+                RETURNING id_com;",
                 new
                 {
                     DateCommande = DateTime.Now,
