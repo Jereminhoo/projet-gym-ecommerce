@@ -85,12 +85,11 @@ namespace Projet_salle_de_gym.Controllers
             foreach (var item in panier)
             {
                 await connection.ExecuteAsync(
-                    @"INSERT INTO detail (id_com, id_prod, quantite, total_prix_unit)
-              VALUES (@CommandeId, @ProduitId, @Quantite, @Total);",
+                    @"INSERT INTO detail (id_com, quantite, total_prix_unit)
+              VALUES (@CommandeId, @Quantite, @Total);",
                     new
                     {
                         CommandeId = commandeId,
-                        ProduitId = item.IdProduit,
                         Quantite = item.Quantite,
                         Total = item.Prix * item.Quantite
                     });
