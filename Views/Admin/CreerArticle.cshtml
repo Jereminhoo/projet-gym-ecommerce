@@ -44,8 +44,11 @@
 
     <div class="form-group">
         <label for="imageFile">Image</label>
-        <input type="file" name="imageFile" class="form-control" />
+        <input type="file" name="imageFile" class="form-control" data-val="false" />
+        <span class="text-danger">@ViewData.ModelState["imageFile"]?.Errors.FirstOrDefault()?.ErrorMessage</span>
     </div>
+
+
 
     <button type="submit" class="btn btn-primary">Créer</button>
 </form>

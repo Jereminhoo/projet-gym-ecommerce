@@ -50,27 +50,30 @@ namespace Projet_salle_de_gym.Controllers
         [HttpPost]
         public async Task<IActionResult> CreerArticle(Produit produit, IFormFile imageFile)
         {
+            // Si le formulaire est invalide (champ requis vide), on réaffiche
             if (!ModelState.IsValid)
-                return View();
-            if (imageFile != null && imageFile.Length > 0)
             {
-                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
-
-                if (!Directory.Exists(uploadsFolder))
-                    Directory.CreateDirectory(uploadsFolder);
-
-                var fileName = Path.GetFileName(imageFile.FileName); // <-- utilise le vrai nom
-                var filePath = Path.Combine(uploadsFolder, fileName);
-
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await imageFile.CopyToAsync(stream);
-                }
-
-                produit.Photo = fileName;
+                return View(produit);
             }
 
 
+            // Gérer l'image
+            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
+
+            if (!Directory.Exists(uploadsFolder))
+                Directory.CreateDirectory(uploadsFolder);
+
+            var fileName = Path.GetFileName(imageFile.FileName);
+            var filePath = Path.Combine(uploadsFolder, fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await imageFile.CopyToAsync(stream);
+            }
+
+            produit.Photo = fileName;
+
+            // Enregistrement BDD
             using var connection = await _connectionProvider.CreateConnection();
             var query = @"INSERT INTO produit (nom_produit, description, stock, prix, id_cat, photo)
                   VALUES (@Nom_produit, @Description, @Stock, @Prix, @Id_cat, @Photo)";
@@ -78,6 +81,8 @@ namespace Projet_salle_de_gym.Controllers
 
             return RedirectToAction("GererArticles");
         }
+
+
 
 
 
