@@ -26,6 +26,8 @@ namespace Projet_salle_de_gym.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginModel model)
         {
+            if (!ModelState.IsValid)
+                return View();
             using var connection = await _connectionProvider.CreateConnection();
             var utilisateur = await connection.QueryFirstOrDefaultAsync<Utilisateur>(
                 "SELECT * FROM utilisateur WHERE mail = @mail",

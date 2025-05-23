@@ -4,19 +4,19 @@ namespace Projet_salle_de_gym.Models.Auth
 {
     public class UtilisateurRegisterModel
     {
-        [Required, StringLength(50)]
+        [Required, StringLength(50, ErrorMessage = "Le champ ne peut pas être vide")]
         [Display(Name = "Nom")]
         public string Nom_util { get; set; }
 
-        [Required, StringLength(50)]
+        [Required, StringLength(50, ErrorMessage = "Le champ ne peut pas être vide")]
         [Display(Name = "Prénom")]
         public string Prenom_util { get; set; }
 
-        [Required, EmailAddress]
+        [Required (ErrorMessage = "Le champ ne peut pas être vide")]
         [Display(Name = "Email")]
         public string Mail { get; set; }
 
-        [Required, StringLength(100, MinimumLength = 4)]
+        [Required, StringLength(100, MinimumLength = 4,ErrorMessage="Le mot de passe doit être au minimum de 4 caractères")]
         [Display(Name = "Mot de passe")]
         public string Mdp { get; set; }
 

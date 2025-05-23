@@ -4,12 +4,12 @@ namespace Projet_salle_de_gym.Models.Auth
 {
     public class LoginModel
     {
-        [Required]
-        [Display(Name = "Mail")]
+        [Required(ErrorMessage = "L'email est requis.")]
+        [Display(Name = "email")]
         public string Mail { get; set; }
 
-        [Required]
-        [Display(Name = "Mot de passe")]
+        [Required(ErrorMessage = "Le mot de passe est requis.")]
+        [Display(Name = "mot de passe")]
         public string Mdp { get; set; }
     }
 
