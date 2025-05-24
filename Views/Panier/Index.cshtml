@@ -1,6 +1,11 @@
 ﻿@model List<Projet_salle_de_gym.Models.Panier.PanierItem>
 
 <h2>Votre panier</h2>
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-info">@TempData["Message"]</div>
+}
+
 
 @if (!Model.Any())
 {

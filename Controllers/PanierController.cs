@@ -66,6 +66,18 @@ namespace Projet_salle_de_gym.Controllers
 
             using var connection = await _connectionProvider.CreateConnection();
 
+            foreach (var item in panier)
+            {
+                var stock = await connection.ExecuteScalarAsync<int>(
+                    "SELECT stock FROM produit WHERE id_prod = @Id", new { Id = item.IdProduit });
+
+                if (stock < item.Quantite)
+                {
+                    TempData["Message"] = $"Stock insuffisant pour \"{item.Nom}\" (stock actuel : {stock}).";
+                    return RedirectToAction("Index");
+                }
+            }
+
             var commandeId = await connection.ExecuteScalarAsync<int>(
                 @"INSERT INTO commande (date_com, id_util)
           VALUES (@DateCommande, @UtilisateurId)
@@ -78,6 +90,7 @@ namespace Projet_salle_de_gym.Controllers
 
             foreach (var item in panier)
             {
+                // Insère la ligne dans la table des détails
                 await connection.ExecuteAsync(
                     @"INSERT INTO detail (id_com, id_prod, quantite, total_prix_unit)
               VALUES (@CommandeId, @IdProduit, @Quantite, @Total);",
@@ -88,6 +101,17 @@ namespace Projet_salle_de_gym.Controllers
                         Quantite = item.Quantite,
                         Total = item.Prix * item.Quantite
                     });
+
+                // Diminue le stock du produit
+                await connection.ExecuteAsync(
+                    @"UPDATE produit
+              SET stock = stock - @Quantite
+              WHERE id_prod = @IdProduit;",
+                    new
+                    {
+                        IdProduit = item.IdProduit,
+                        Quantite = item.Quantite
+                    });
             }
 
             PanierService.SavePanier(HttpContext.Session, new List<PanierItem>());
@@ -95,6 +119,7 @@ namespace Projet_salle_de_gym.Controllers
             TempData["Message"] = $"Commande #{commandeId} créée avec succès.";
             return RedirectToAction("Index");
         }
+
 
 
 
