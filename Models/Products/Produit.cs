@@ -17,17 +17,19 @@ namespace Projet_salle_de_gym.Models.Products
         [Required(ErrorMessage = "Le stock est requis.")]
         [Range(1, int.MaxValue, ErrorMessage = "Le stock doit être supérieur à 0.")]
         [Display(Name = "Stock")]
-        public int? Stock { get; set; }  // <- rendu nullable ici
+        public int? Stock { get; set; }  
 
         [Required(ErrorMessage = "Le prix est requis.")]
         [Range(0.01, double.MaxValue, ErrorMessage = "Le prix doit être supérieur à 0.")]
         [Display(Name = "Prix")]
-        public decimal? Prix { get; set; }  // <- aussi rendu nullable
+        public decimal? Prix { get; set; } 
 
         [Required(ErrorMessage = "La catégorie est requise.")]
         [Display(Name = "Id catégorie")]
-        public int? Id_cat { get; set; }  // <- rendu nullable
+        public int? Id_cat { get; set; }
 
+        [Required(ErrorMessage = "La photo est requise.")]
+        [Display(Name = "Photo")]
         public string? Photo { get; set; }
     }
 }
