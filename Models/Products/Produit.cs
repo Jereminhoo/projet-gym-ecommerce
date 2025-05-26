@@ -28,7 +28,6 @@ namespace Projet_salle_de_gym.Models.Products
         [Display(Name = "Id catégorie")]
         public int? Id_cat { get; set; }
 
-        [Required(ErrorMessage = "La photo est requise.")]
         [Display(Name = "Photo")]
         public string? Photo { get; set; }
     }

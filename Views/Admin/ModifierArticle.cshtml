@@ -33,12 +33,16 @@
         <label asp-for="Photo">Image</label>
         <select asp-for="Photo" class="form-control">
             <option value="">-- Choisir une image --</option>
-            @foreach (var image in ViewBag.Images as List<string>)
+            @if (ViewBag.Images != null)
             {
+                foreach (var image in ViewBag.Images as List<string>)
+                {
                 <option value="@image" selected="@(Model.Photo == image)">
-                    @image
+                        @image
                 </option>
+                }
             }
+
         </select>
     </div>
 

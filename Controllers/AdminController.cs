@@ -47,19 +47,23 @@ namespace Projet_salle_de_gym.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> CreerArticle(Produit produit, IFormFile imageFile)
         {
-            // Si le formulaire est invalide (champ requis vide), on réaffiche
             if (!ModelState.IsValid)
             {
+                TempData["Erreur"] = "Une ou plusieurs erreurs ont empêché la création de l’article.";
                 return View(produit);
             }
 
+            if (imageFile == null || imageFile.Length == 0)
+            {
+                TempData["Erreur"] = "Veuillez sélectionner une image.";
+                return View(produit);
+            }
 
-            // Gérer l'image
             var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
-
             if (!Directory.Exists(uploadsFolder))
                 Directory.CreateDirectory(uploadsFolder);
 
@@ -73,7 +77,6 @@ namespace Projet_salle_de_gym.Controllers
 
             produit.Photo = fileName;
 
-            // Enregistrement BDD
             using var connection = await _connectionProvider.CreateConnection();
             var query = @"INSERT INTO produit (nom_produit, description, stock, prix, id_cat, photo)
                   VALUES (@Nom_produit, @Description, @Stock, @Prix, @Id_cat, @Photo)";
@@ -81,6 +84,11 @@ namespace Projet_salle_de_gym.Controllers
 
             return RedirectToAction("GererArticles");
         }
+
+
+
+
+
 
 
 
