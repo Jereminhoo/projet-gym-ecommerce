@@ -12,7 +12,7 @@ namespace Projet_salle_de_gym.Core.Services
         {
             var json = session.GetString(PanierKey);
             return json != null
-                ? JsonSerializer.Deserialize<List<PanierItem>>(json)
+                ? JsonSerializer.Deserialize<List<PanierItem>>(json) // on s'est aidé de chat 
                 : new List<PanierItem>();
         }
 
