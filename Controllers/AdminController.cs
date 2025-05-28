@@ -62,7 +62,7 @@ namespace Projet_salle_de_gym.Controllers
                 TempData["Erreur"] = "Veuillez sélectionner une image.";
                 return View(produit);
             }
-
+            //utilisation de chatgpt pour la suite du code
             var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
             if (!Directory.Exists(uploadsFolder))
                 Directory.CreateDirectory(uploadsFolder);
